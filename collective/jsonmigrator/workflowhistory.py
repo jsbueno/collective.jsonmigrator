@@ -50,16 +50,18 @@ class WorkflowHistory(object):
             if obj is None or not getattr(obj, 'workflow_history', False):
                 yield item; continue
 
+            # Is this check necessary? It fails for
+            # dexterity content types
             if IBaseObject.providedBy(obj):
-                item_tmp = item
+                workflow_history = item[workflowhistorykey].copy()
 
                 # get back datetime stamp and set the workflow history
-                for workflow in item_tmp[workflowhistorykey]:
-                    for k, workflow2 in enumerate(item_tmp[workflowhistorykey][workflow]):
-                        if 'time' in item_tmp[workflowhistorykey][workflow][k]:
-                            item_tmp[workflowhistorykey][workflow][k]['time'] = DateTime(
-                                    item_tmp[workflowhistorykey][workflow][k]['time'])
-                obj.workflow_history.data = item_tmp[workflowhistorykey]
+                for transitions in workflow_history.values():
+                    for transition in transitions:
+                        if 'time' in transition:
+                            transition['time'] = DateTime(transition['time'])
+
+                obj.workflow_history.data = workflow_history
 
                 # update security
                 workflows = self.wftool.getWorkflowsFor(obj)
