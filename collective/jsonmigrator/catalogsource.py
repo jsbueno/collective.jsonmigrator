@@ -44,9 +44,6 @@ class CatalogSourceSection(object):
         opener = urllib2.build_opener(auth_handler)
         urllib2.install_opener(opener)
 
-        req_url = ('%s%s/get_catalog_results' % (self.remote_url,
-            catalog_path), urllib.urlencode({'catalog_query': catalog_query}))
-        print (req_url)
         req = urllib2.Request('%s%s/get_catalog_results' % (self.remote_url,
             catalog_path), urllib.urlencode({'catalog_query': catalog_query}))
         try:
