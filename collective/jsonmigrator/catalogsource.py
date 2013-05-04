@@ -71,9 +71,14 @@ class CatalogSourceSection(object):
     def __iter__(self):
         for item in self.previous:
             yield item
-
+        offset = int(self.options.get("offset", "0"))    	
+      	counter = 0
         for path in self.item_paths:
             skip = False
+            counter += 1
+            if counter < offset:
+                 logger.info("Skipping item n.# %d at %s " % (counter, path))
+                 continue
             for skip_path in self.remote_skip_paths:
                 if path.startswith(skip_path):
                     skip = True
