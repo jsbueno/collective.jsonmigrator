@@ -76,7 +76,7 @@ class CatalogSourceSection(object):
             yield item
         offset = int(self.options.get("offset", "0"))
       	counter = 0
-      	if hasattr(self.transmogrifier, "jsomigrator_offset"):
+      	if hasattr(self.transmogrifier, "jsonmigrator_offset"):
             # truncate results when live importing?
             # inject the parameters bellow in the
             # transmogrifier object if you are
