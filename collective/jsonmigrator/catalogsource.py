@@ -85,7 +85,7 @@ class CatalogSourceSection(object):
             self.item_paths = self.item_paths[
                                 self.transmogrifier.jsonmigrator_offset:
                                 self.transmogrifier.jsonmigrator_limit]
-            self.logger.warn("Migrating %d items from prosition %s" %
+            logger.warn("Migrating %d items from position %s" %
                             (self.transmogrifier.jsonmigrator_limit,
                              self.transmogrifier.jsonmigrator_offset))
 
