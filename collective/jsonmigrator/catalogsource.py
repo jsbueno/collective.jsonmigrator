@@ -83,8 +83,8 @@ class CatalogSourceSection(object):
             # doing an interactive import of small chunks
             # in the python prompt
             self.item_paths = self.item_paths[
-                                self.jsonmigrator_offset:
-                                self.jsonmigrator_limit]
+                                self.transmogrifier.jsonmigrator_offset:
+                                self.transmogrifier.jsonmigrator_limit]
             self.logger.warn("Migrating %d items from prosition %s" %
                             (self.transmogrifier.jsonmigrator_limit,
                              self.transmogrifier.jsonmigrator_offset))
