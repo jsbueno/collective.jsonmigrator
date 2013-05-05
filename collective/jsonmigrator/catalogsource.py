@@ -1,4 +1,5 @@
 import base64
+import ast
 import urllib
 import urllib2
 import simplejson
@@ -16,6 +17,7 @@ class CatalogSourceSection(object):
     implements(ISection)
 
     def __init__(self, transmogrifier, name, options, previous):
+        self.transmogrifier = transmogrifier
         self.previous = previous
         self.options = options
         self.context = transmogrifier.context
@@ -52,6 +54,7 @@ class CatalogSourceSection(object):
         except urllib2.URLError:
             raise
 
+        # FIXME: this breaks "sort_on" on the catalog_query of the cfg
         self.item_paths = sorted(simplejson.loads(resp))
 
     def get_option(self, name, default):
@@ -71,8 +74,21 @@ class CatalogSourceSection(object):
     def __iter__(self):
         for item in self.previous:
             yield item
-        offset = int(self.options.get("offset", "0"))    	
+        offset = int(self.options.get("offset", "0"))
       	counter = 0
+      	if hasattr("jsomigrator_offset") in self.transmogrifier:
+            # truncate results when live importing?
+            # inject the parameters bellow in the
+            # transmogrifier object if you are
+            # doing an interactive import of small chunks
+            # in the python prompt
+            self.item_paths = self.item_paths[
+                                self.jsonmigrator_offset:
+                                self.jsonmigrator_limit]
+            self.logger.warn("Migrating %d items from prosition %s" %
+                            (self.transmogrifier.jsonmigrator_limit,
+                             self.transmogrifier.jsonmigrator_offset))
+
         for path in self.item_paths:
             skip = False
             counter += 1
