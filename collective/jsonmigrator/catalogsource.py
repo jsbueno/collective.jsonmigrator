@@ -75,8 +75,9 @@ class CatalogSourceSection(object):
         for item in self.previous:
             yield item
         offset = int(self.options.get("offset", "0"))
-      	counter = 0
-      	if hasattr(self.transmogrifier, "jsonmigrator_offset"):
+        limit = int(self.options.get("limit", "0"))
+        counter = 0
+        if hasattr(self.transmogrifier, "jsonmigrator_offset"):
             # truncate results when live importing?
             # inject the parameters bellow in the
             # transmogrifier object if you are
@@ -87,15 +88,20 @@ class CatalogSourceSection(object):
             self.item_paths = self.item_paths[
                                 self.transmogrifier.jsonmigrator_offset:
                                 hard_limit]
-           logger.warn("Migrating %d items from position %s" %
+            logger.warn("Migrating %d items from position %s" %
                             (self.transmogrifier.jsonmigrator_limit,
                              self.transmogrifier.jsonmigrator_offset))
 
         for path in self.item_paths:
             skip = False
+            if not counter % 100:
+                print counter
             counter += 1
             if counter < offset:
-                 logger.info("Skipping item n.# %d at %s " % (counter, path))
+                 logger.debug("Skipping item n.# %d at %s " % (counter, path))
+                 continue
+            if limit and counter > (offset + limit):
+                 logger.debug("Post skipping item n.# %d at %s " % (counter, path))
                  continue
             for skip_path in self.remote_skip_paths:
                 if path.startswith(skip_path):
