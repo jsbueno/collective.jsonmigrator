@@ -52,7 +52,8 @@ class WorkflowHistory(object):
 
             # Is this check necessary? It fails for
             # dexterity content types
-            if IBaseObject.providedBy(obj):
+            #if IBaseObject.providedBy(obj):
+            if True:
                 workflow_history = item[workflowhistorykey].copy()
 
                 # get back datetime stamp and set the workflow history
