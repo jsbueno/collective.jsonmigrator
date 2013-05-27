@@ -62,6 +62,7 @@ class Properties(object):
             for pid,pvalue,ptype in item[propertieskey]:
                 if getattr(aq_base(obj), pid, None) is not None:
                     # if object have a attribute equal to property, do nothing
+                    yield item
                     continue
 
                 try:
